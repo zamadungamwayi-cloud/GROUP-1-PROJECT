@@ -14,7 +14,7 @@ export class User {
   @Column({ default: true })
   isActive!: boolean;
 
-  @Column({ default: 'user' })
+  @Column({ default: 'admin' })
   role!: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

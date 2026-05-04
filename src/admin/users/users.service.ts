@@ -8,6 +8,12 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
+  async findByEmail(email: string) {
+    return this.repo.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'role'],
+    });
+  }
   constructor(
     @InjectRepository(User)
     private repo: Repository<User>,
@@ -15,12 +21,9 @@ export class UsersService {
 
   // CREATE USER
   async create(dto: CreateUserDto) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-
     const user = this.repo.create({
       email: dto.email,
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       password: hashedPassword,
     });
 
@@ -36,7 +39,6 @@ export class UsersService {
   findOne(id: number) {
     return this.repo.findOne({ where: { id } });
   }
-
   // UPDATE USER
   async update(id: number, dto: UpdateUserDto) {
     await this.repo.update(id, dto);
